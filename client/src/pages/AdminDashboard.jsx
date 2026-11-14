@@ -259,7 +259,7 @@ function AdminDashboard() {
 
           <div className="admin-welcome-decoration">
             <div className="admin-decoration-circle">
-              <span>✦</span>
+              <span></span>
             </div>
           </div>
         </section>
