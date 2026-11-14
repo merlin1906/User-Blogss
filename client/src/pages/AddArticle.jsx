@@ -10,8 +10,10 @@ import {
 
 import "../Admin.css";
 
-const API_URL = "http://localhost:5000/api";
-const SERVER_URL = "http://localhost:5000";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+const SERVER_URL = API_URL.replace(/\/api\/?$/, "");
 
 const ALLOWED_TYPES = [
   "image/jpeg",
