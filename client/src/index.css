@@ -660,3 +660,38 @@
     font-size: 14px;
   }
 }
+
+/* Home Page Admin Portal Link */
+
+.home-admin-access {
+  display: flex;
+  justify-content: center;
+  padding: 18px 20px 28px;
+  background: #fff;
+}
+
+.home-admin-access a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 17px;
+  border: 1px solid #e9e3f5;
+  border-radius: 30px;
+  background: #faf8ff;
+  color: #74629b;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.home-admin-access a:hover {
+  border-color: #673de6;
+  background: #f0ebff;
+  color: #673de6;
+  transform: translateY(-2px);
+}
+
+.home-admin-arrow {
+  font-size: 16px;
+}

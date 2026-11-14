@@ -40,7 +40,6 @@ function Home() {
 
   const keyword = search.trim().toLowerCase();
 
-  // Calculate categories only when articles change.
   const categories = useMemo(() => {
     return [
       "All",
@@ -50,7 +49,6 @@ function Home() {
     ];
   }, [safeArticles]);
 
-  // Filter articles based on search and category.
   const filteredArticles = useMemo(() => {
     return safeArticles.filter((article) => {
       const title = (article.title || "").toLowerCase();
@@ -70,14 +68,12 @@ function Home() {
     });
   }, [safeArticles, keyword, category]);
 
-  // Featured articles.
   const featured = useMemo(() => {
     return filteredArticles
       .filter((article) => article.featured === true)
       .slice(0, 2);
   }, [filteredArticles]);
 
-  // Trending articles.
   const trending = useMemo(() => {
     return [...safeArticles]
       .filter((article) => article.trending === true)
@@ -88,7 +84,6 @@ function Home() {
       .slice(0, 3);
   }, [safeArticles]);
 
-  // Latest articles.
   const latest = useMemo(() => {
     return [...filteredArticles].sort(
       (a, b) =>
@@ -142,7 +137,6 @@ function Home() {
 
         {!loading && !error && (
           <>
-            {/* Featured Articles */}
             <section className="section" id="featured">
               <div className="section-heading">
                 <h2>Featured Articles</h2>
@@ -165,14 +159,12 @@ function Home() {
               )}
             </section>
 
-            {/* Categories */}
             <CategorySection
               categories={categories}
               selectedCategory={category}
               setSelectedCategory={setCategory}
             />
 
-            {/* Latest Articles */}
             <section className="section" id="latest">
               <div className="section-heading section-header-row">
                 <div>
@@ -201,11 +193,18 @@ function Home() {
               )}
             </section>
 
-            {/* Trending Articles */}
             <TrendingArticles articles={trending} />
           </>
         )}
       </main>
+
+      {/* ADMIN ACCESS */}
+      <div className="home-admin-access">
+        <Link to="/admin/login">
+          <span>Admin Portal</span>
+          <span className="home-admin-arrow">→</span>
+        </Link>
+      </div>
 
       <Footer />
     </>
