@@ -1234,4 +1234,26 @@
     padding: 8px 10px;
   }
 }
+.admin-brand-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.admin-login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
 
+.admin-login-logo {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+}
+
+.admin-login-brand h1 {
+  margin: 0;
+}

@@ -6,7 +6,15 @@ function Footer() {
     <footer className="footer">
       <div className="footer-content">
         <div>
-          <h2>USER-BLOGSS<span>.</span></h2>
+          <Link to="/" className="footer-brand">
+            <img
+              src="/favicon-192%20(1).png"
+              alt="UB Logo"
+              className="footer-logo"
+            />
+            <h2>USER-BLOGSS<span>.</span></h2>
+          </Link>
+
           <p>
             Discover technology, explore innovation and
             stay updated with the digital world.
@@ -26,12 +34,11 @@ function Footer() {
           <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
           <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
           <a href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook</a>
-          <a href="mailto:info@USER-BLOGSScom">Email Us</a>
+          <a href="mailto:info@user-blogss.com">Email Us</a>
         </div>
       </div>
 
-      <div className="footer-bottom">
-      </div>
+      <div className="footer-bottom"></div>
     </footer>
   );
 }

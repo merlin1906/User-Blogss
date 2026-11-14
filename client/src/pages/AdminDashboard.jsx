@@ -162,7 +162,11 @@ function AdminDashboard() {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="admin-brand">
-          <div className="admin-brand-icon">S</div>
+          <img
+            src="/favicon-192%20(1).png"
+            alt="UB Logo"
+            className="admin-brand-logo"
+          />
           <div>
             <h2>USER-BLOGSS</h2>
             <p>ADMIN CONSOLE</p>

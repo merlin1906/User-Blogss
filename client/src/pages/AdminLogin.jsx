@@ -37,7 +37,16 @@ function AdminLogin() {
   return (
     <div className="admin-login-page">
       <div className="admin-login-card">
-        <h1>USER-BLOGSS</h1>
+
+        <div className="admin-login-brand">
+          <img
+            src="/favicon-192%20(1).png"
+            alt="UB Logo"
+            className="admin-login-logo"
+          />
+          <h1>USER-BLOGSS</h1>
+        </div>
+
         <p className="admin-subtitle">Blog Administration</p>
 
         <h2>Admin Login</h2>
@@ -66,12 +75,13 @@ function AdminLogin() {
             required
           />
 
-          {error && <p className="admin-error">{error}</p>}   
+          {error && <p className="admin-error">{error}</p>}
 
           <button type="submit" disabled={loading}>
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
+
       </div>
     </div>
   );
