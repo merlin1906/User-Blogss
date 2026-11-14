@@ -57,7 +57,6 @@ const getCurrentLocalDateTime = () => {
 };
 
 // Convert saved article content into editable blocks.
-// Existing image blocks are retained.
 const normalizeContent = (content) => {
   if (typeof content === "string") {
     return content
@@ -266,6 +265,18 @@ function AddArticle() {
     ]);
   };
 
+  // NEW: Add heading for Table of Contents.
+  const addHeading = () => {
+    setContentBlocks((previous) => [
+      ...previous,
+      {
+        _key: createBlockKey(),
+        type: "heading",
+        text: "",
+      },
+    ]);
+  };
+
   const removeContentBlock = (key) => {
     const block = contentBlocks.find((item) => item._key === key);
 
@@ -384,9 +395,10 @@ function AddArticle() {
     e.preventDefault();
     setError("");
 
+    // Headings and paragraphs both count as text content.
     const hasTextContent = contentBlocks.some(
       (block) =>
-        block.type === "paragraph" &&
+        ["paragraph", "heading"].includes(block.type) &&
         String(block.text || "").trim()
     );
 
@@ -458,6 +470,20 @@ function AddArticle() {
       const finalContent = [];
 
       contentBlocks.forEach((block) => {
+        // NEW: Save heading blocks for the Table of Contents.
+        if (block.type === "heading") {
+          const text = String(block.text || "").trim();
+
+          if (text) {
+            finalContent.push({
+              type: "heading",
+              text,
+            });
+          }
+
+          return;
+        }
+
         if (block.type === "paragraph") {
           const text = String(block.text || "").trim();
 
@@ -650,7 +676,7 @@ function AddArticle() {
                 <div>
                   <strong>Content Blocks</strong>
                   <p style={contentStyles.helper}>
-                    Write paragraphs and insert images into your article.
+                    Add headings, paragraphs and images. Headings will appear in the Table of Contents.
                   </p>
                 </div>
 
@@ -668,7 +694,11 @@ function AddArticle() {
                     <strong>
                       {block.type === "image"
                         ? `Image ${index + 1}`
-                        : `Paragraph ${index + 1}`}
+                        : block.type === "heading"
+                          ? `Heading ${index + 1}`
+                          : block.type === "paragraph"
+                            ? `Paragraph ${index + 1}`
+                            : `${block.type || "Content"} ${index + 1}`}
                     </strong>
 
                     <button
@@ -679,6 +709,22 @@ function AddArticle() {
                       Remove
                     </button>
                   </div>
+
+                  {block.type === "heading" && (
+                    <input
+                      type="text"
+                      value={block.text || ""}
+                      onChange={(e) =>
+                        updateContentBlock(
+                          block._key,
+                          "text",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Enter section heading..."
+                      style={contentStyles.headingInput}
+                    />
+                  )}
 
                   {block.type === "paragraph" && (
                     <textarea
@@ -761,6 +807,7 @@ function AddArticle() {
                   )}
 
                   {block.type !== "paragraph" &&
+                    block.type !== "heading" &&
                     block.type !== "image" && (
                       <div style={contentStyles.unknownBlock}>
                         Existing {block.type || "content"} block preserved.
@@ -770,6 +817,14 @@ function AddArticle() {
               ))}
 
               <div style={contentStyles.toolbar}>
+                <button
+                  type="button"
+                  onClick={addHeading}
+                  style={contentStyles.addHeadingButton}
+                >
+                  + Add Heading
+                </button>
+
                 <button
                   type="button"
                   onClick={addParagraph}
@@ -1133,6 +1188,17 @@ const contentStyles = {
     resize: "vertical",
     lineHeight: 1.6,
   },
+  // NEW: Heading input styling.
+  headingInput: {
+    width: "100%",
+    boxSizing: "border-box",
+    padding: "12px",
+    border: "1px solid #a5b4fc",
+    borderRadius: "7px",
+    fontSize: "16px",
+    fontWeight: 600,
+    color: "#1e293b",
+  },
   contentImagePreview: {
     display: "block",
     width: "100%",
@@ -1173,6 +1239,16 @@ const contentStyles = {
     flexWrap: "wrap",
     gap: "10px",
     marginTop: "18px",
+  },
+  // NEW: Add Heading button styling.
+  addHeadingButton: {
+    padding: "11px 16px",
+    background: "#dcfce7",
+    color: "#166534",
+    border: "none",
+    borderRadius: "7px",
+    fontWeight: 600,
+    cursor: "pointer",
   },
   addParagraphButton: {
     padding: "11px 16px",
