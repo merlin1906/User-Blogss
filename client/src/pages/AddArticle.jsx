@@ -565,7 +565,7 @@ function AddArticle() {
 
         <div className="admin-form-header">
           <div>
-            <p className="admin-form-eyebrow">SOFTRATE BLOG ADMIN</p>
+            <p className="admin-form-eyebrow">USER-BLOGSS BLOG ADMIN</p>
             <h1>{isEditing ? "Edit Article" : "Add New Article"}</h1>
             <p>
               {isEditing

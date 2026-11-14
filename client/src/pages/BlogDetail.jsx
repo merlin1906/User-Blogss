@@ -63,10 +63,10 @@ const getCategoryName = (category) => {
 };
 
 const getAuthorName = (author) => {
-  if (!author) return "Softrate";
+  if (!author) return "USER-BLOGSS";
 
   if (typeof author === "object") {
-    return author.name || "Softrate";
+    return author.name || "USER-BLOGSS";
   }
 
   return author;
@@ -239,7 +239,7 @@ function BlogDetail() {
     updateMeta(
       'meta[property="og:site_name"]',
       "content",
-      "Softrate Blog",
+      "USER-BLOGSS Blog",
       (element) => element.setAttribute("property", "og:site_name")
     );
 
@@ -351,7 +351,7 @@ function BlogDetail() {
       },
       publisher: {
         "@type": "Organization",
-        name: "Softrate",
+        name: "USER-BLOGSS",
       },
       datePublished:
         article.publishedAt || article.createdAt,

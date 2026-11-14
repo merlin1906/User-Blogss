@@ -37,7 +37,7 @@ function AdminLogin() {
   return (
     <div className="admin-login-page">
       <div className="admin-login-card">
-        <h1>Softrate</h1>
+        <h1>USER-BLOGSS</h1>
         <p className="admin-subtitle">Blog Administration</p>
 
         <h2>Admin Login</h2>

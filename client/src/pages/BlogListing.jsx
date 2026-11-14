@@ -131,7 +131,7 @@ function BlogListing() {
 
       <section className="listing-hero">
         <div>
-          <span className="hero-tag">SOFTRATE BLOG</span>
+          <span className="hero-tag">USER-BLOGSS BLOG</span>
 
           <h1>Explore All Articles</h1>
 

@@ -164,7 +164,7 @@ function AdminDashboard() {
         <div className="admin-brand">
           <div className="admin-brand-icon">S</div>
           <div>
-            <h2>Softrate</h2>
+            <h2>USER-BLOGSS</h2>
             <p>ADMIN CONSOLE</p>
           </div>
         </div>
@@ -242,7 +242,7 @@ function AdminDashboard() {
         {/* Welcome */}
         <section className="admin-welcome">
           <div className="admin-welcome-content">
-            <span className="admin-welcome-tag">SOFTRATE BLOG</span>
+            <span className="admin-welcome-tag">USER-BLOGSS BLOG</span>
             <h2>Welcome back, Admin!</h2>
             <p>
               Your content hub is ready. Create, manage and publish

@@ -7,7 +7,7 @@ const articles = [
     description:
       "Discover how artificial intelligence is transforming industries and shaping the future of technology.",
     category: "Artificial Intelligence",
-    author: "Softrate Team",
+    author: "USER-BLOGSS Team",
     date: "2026-11-10",
     image:
       "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1000",
@@ -57,7 +57,7 @@ const articles = [
     description:
       "Explore the latest frameworks, tools and technologies used in modern web development.",
     category: "Web Development",
-    author: "Softrate Team",
+    author: "USER-BLOGSS Team",
     date: "2026-11-09",
     image:
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1000",
@@ -99,7 +99,7 @@ const articles = [
     description:
       "Learn how cloud computing helps businesses improve scalability and performance.",
     category: "Cloud Computing",
-    author: "Softrate Team",
+    author: "USER-BLOGSS Team",
     date: "2026-11-08",
     image:
       "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1000",
@@ -128,7 +128,7 @@ const articles = [
     description:
       "Understand the importance of protecting data and digital systems.",
     category: "Cybersecurity",
-    author: "Softrate Team",
+    author: "USER-BLOGSS Team",
     date: "2026-11-07",
     image:
       "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1000",
@@ -157,7 +157,7 @@ const articles = [
     description:
       "Discover blockchain applications and decentralized technology.",
     category: "Blockchain",
-    author: "Softrate Team",
+    author: "USER-BLOGSS Team",
     date: "2026-11-06",
     image:
       "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1000",
@@ -186,7 +186,7 @@ const articles = [
     description:
       "An introduction to machine learning concepts and real-world applications.",
     category: "Artificial Intelligence",
-    author: "Softrate Team",
+    author: "USER-BLOGSS Team",
     date: "2026-11-05",
     image:
       "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1000",

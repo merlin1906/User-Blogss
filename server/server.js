@@ -30,7 +30,7 @@ app.use(
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Softrate Blog API is running!",
+    message: "USER-BLOGSS Blog API is running!",
   });
 });
 

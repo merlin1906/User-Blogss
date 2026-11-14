@@ -5,7 +5,7 @@ function Navbar() {
   return (
     <header className="navbar">
       <Link to="/" className="logo">
-        SOFTRATE<span>.</span>
+        USER-BLOGSS<span>.</span>
       </Link>
 
       <nav className="nav-links">

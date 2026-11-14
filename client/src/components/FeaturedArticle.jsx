@@ -31,10 +31,10 @@ const getCategoryName = (category) => {
 };
 
 const getAuthorName = (author) => {
-  if (!author) return "Softrate";
+  if (!author) return "USER-BLOGSS";
 
   if (typeof author === "object") {
-    return author.name || "Softrate";
+    return author.name || "USER-BLOGSS";
   }
 
   return author;

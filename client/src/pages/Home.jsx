@@ -99,7 +99,7 @@ function Home() {
       <section className="hero">
         <div className="hero-content">
           <span className="hero-tag">
-            WELCOME TO SOFTRATE
+            WELCOME TO USER-BLOGSS
           </span>
 
           <h1>
