@@ -6,10 +6,11 @@ function Navbar() {
     <header className="navbar">
       <Link to="/" className="logo">
         <img
-  src="/favicon-192%20(1).png"
-  alt="USER-BLOGSS"
-  className="website-logo"
-/>
+          src="/favicon-192%20(1).png"
+          alt="UB Logo"
+          className="website-logo"
+        />
+        <span className="brand-name">USER-BLOGSS</span>
       </Link>
 
       <nav className="nav-links">
