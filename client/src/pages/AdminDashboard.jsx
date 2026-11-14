@@ -180,7 +180,7 @@ function AdminDashboard() {
                 : ""
             }
           >
-            <span className="admin-nav-icon">▦</span>
+            <span className="admin-nav-icon"></span>
             Dashboard
           </Link>
 
@@ -192,19 +192,19 @@ function AdminDashboard() {
                 : ""
             }
           >
-            <span className="admin-nav-icon">◈</span>
+            <span className="admin-nav-icon"></span>
             Categories
           </Link>
 
           <Link to="/blogs">
-            <span className="admin-nav-icon">↗</span>
+            <span className="admin-nav-icon"></span>
             View Website
           </Link>
         </nav>
 
         <div className="admin-sidebar-bottom">
           <div className="admin-sidebar-note">
-            <span>✦</span>
+            <span></span>
             <p>Manage your content and grow your blog.</p>
           </div>
 
