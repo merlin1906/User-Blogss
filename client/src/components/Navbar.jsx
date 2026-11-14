@@ -5,7 +5,11 @@ function Navbar() {
   return (
     <header className="navbar">
       <Link to="/" className="logo">
-        USER-BLOGSS<span>.</span>
+        <img
+          src="/image_a59b28f0.jpg"
+          alt="USER-BLOGSS"
+          className="website-logo"
+        />
       </Link>
 
       <nav className="nav-links">
