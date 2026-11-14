@@ -243,7 +243,7 @@ function AdminDashboard() {
         <section className="admin-welcome">
           <div className="admin-welcome-content">
             <span className="admin-welcome-tag">SOFTRATE BLOG</span>
-            <h2>Welcome back, Admin! 👋</h2>
+            <h2>Welcome back, Admin!</h2>
             <p>
               Your content hub is ready. Create, manage and publish
               articles to keep your audience engaged.
@@ -276,7 +276,7 @@ function AdminDashboard() {
           >
             <div className="admin-stat-top">
               <span>Total Articles</span>
-              <span className="admin-stat-icon violet">▤</span>
+              <span className="admin-stat-icon violet"></span>
             </div>
             <p className="admin-stat-number">
               {stats.totalArticles}
@@ -295,7 +295,7 @@ function AdminDashboard() {
           >
             <div className="admin-stat-top">
               <span>Published Articles</span>
-              <span className="admin-stat-icon green">✓</span>
+              <span className="admin-stat-icon green"></span>
             </div>
             <p className="admin-stat-number">
               {stats.publishedArticles}
@@ -314,7 +314,7 @@ function AdminDashboard() {
           >
             <div className="admin-stat-top">
               <span>Draft Articles</span>
-              <span className="admin-stat-icon orange">✎</span>
+              <span className="admin-stat-icon orange"></span>
             </div>
             <p className="admin-stat-number">
               {stats.draftArticles}
@@ -416,7 +416,7 @@ function AdminDashboard() {
           {/* Article Table */}
           {filteredArticles.length === 0 ? (
             <div className="admin-empty-state">
-              <div className="admin-empty-icon">▤</div>
+              <div className="admin-empty-icon"></div>
               <h3>No articles found</h3>
               <p>
                 Try changing your filters or create a new article.
@@ -560,11 +560,6 @@ function AdminDashboard() {
             </>
           )}
         </section>
-
-        <footer className="admin-footer">
-          <span>© {new Date().getFullYear()} Softrate Blog</span>
-          <span>Admin Workspace</span>
-        </footer>
 
       </main>
     </div>
