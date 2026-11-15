@@ -15,6 +15,12 @@ const API_URL =
 
 const SERVER_URL = API_URL.replace(/\/api\/?$/, "");
 
+const CLOUDINARY_CLOUD_NAME =
+  import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+const CLOUDINARY_UPLOAD_PRESET =
+  import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
 const ALLOWED_TYPES = [
   "image/jpeg",
   "image/png",
@@ -54,6 +60,37 @@ const getCurrentLocalDateTime = () => {
   return new Date(Date.now() - offset)
     .toISOString()
     .slice(0, 16);
+};
+
+// Upload one image directly to Cloudinary.
+const uploadToCloudinary = async (file) => {
+  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+    throw new Error(
+      "Cloudinary configuration missing. Add VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET to your client environment."
+    );
+  }
+
+  const uploadData = new FormData();
+  uploadData.append("file", file);
+  uploadData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: uploadData,
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.secure_url) {
+    throw new Error(
+      result.error?.message || "Image upload to Cloudinary failed."
+    );
+  }
+
+  return result.secure_url;
 };
 
 // Convert saved article content into editable blocks.
@@ -209,9 +246,7 @@ function AddArticle() {
           });
 
           setContentBlocks(normalizeContent(article.content));
-
           setTags(Array.isArray(article.tags) ? article.tags : []);
-
           setPreview(getImageUrl(article.thumbnail));
         }
       } catch (err) {
@@ -265,7 +300,6 @@ function AddArticle() {
     ]);
   };
 
-  // NEW: Add heading for Table of Contents.
   const addHeading = () => {
     setContentBlocks((previous) => [
       ...previous,
@@ -302,7 +336,9 @@ function AddArticle() {
     ).length;
 
     if (currentUploadCount + files.length > MAX_CONTENT_IMAGES) {
-      setError(`You can upload a maximum of ${MAX_CONTENT_IMAGES} new content images.`);
+      setError(
+        `You can upload a maximum of ${MAX_CONTENT_IMAGES} new content images.`
+      );
       e.target.value = "";
       return;
     }
@@ -395,7 +431,14 @@ function AddArticle() {
     e.preventDefault();
     setError("");
 
-    // Headings and paragraphs both count as text content.
+    // Existing backend cannot update an article thumbnail from a URL.
+    if (isEditing && selectedImage) {
+      setError(
+        "Thumbnail replacement is not supported in edit mode without a backend change. Your existing thumbnail has been kept. You can still upload content images."
+      );
+      return;
+    }
+
     const hasTextContent = contentBlocks.some(
       (block) =>
         ["paragraph", "heading"].includes(block.type) &&
@@ -458,77 +501,76 @@ function AddArticle() {
     setSaving(true);
 
     try {
+      // Upload new images directly to Cloudinary.
+      // Existing saved image URLs are preserved.
+      const thumbnailUploadPromise = selectedImage
+        ? uploadToCloudinary(selectedImage)
+        : Promise.resolve("");
+
+      const contentUploadPromise = Promise.all(
+        contentBlocks.map(async (block) => {
+          if (block.type === "heading") {
+            const text = String(block.text || "").trim();
+
+            return text
+              ? {
+                  type: "heading",
+                  text,
+                }
+              : null;
+          }
+
+          if (block.type === "paragraph") {
+            const text = String(block.text || "").trim();
+
+            return text
+              ? {
+                  type: "paragraph",
+                  text,
+                }
+              : null;
+          }
+
+          if (block.type === "image") {
+            let imageUrl = block.src || block.url || "";
+
+            if (block.file) {
+              imageUrl = await uploadToCloudinary(block.file);
+            }
+
+            return {
+              type: "image",
+              alt: block.alt || "",
+              caption: block.caption || "",
+              src: imageUrl,
+            };
+          }
+
+          // Preserve any other existing content block types.
+          const {
+            _key,
+            preview: ignoredPreview,
+            file: ignoredFile,
+            ...savedBlock
+          } = block;
+
+          return savedBlock;
+        })
+      );
+
+      const [uploadedThumbnail, finalContentWithEmpty] =
+        await Promise.all([
+          thumbnailUploadPromise,
+          contentUploadPromise,
+        ]);
+
+      const finalContent = finalContentWithEmpty.filter(Boolean);
+
       const formData = new FormData();
 
       formData.append("title", form.title);
       formData.append("slug", form.slug);
       formData.append("description", form.description);
-
-      // Convert ordered editor blocks into backend content.
-      let imageIndex = 0;
-
-      const finalContent = [];
-
-      contentBlocks.forEach((block) => {
-        // NEW: Save heading blocks for the Table of Contents.
-        if (block.type === "heading") {
-          const text = String(block.text || "").trim();
-
-          if (text) {
-            finalContent.push({
-              type: "heading",
-              text,
-            });
-          }
-
-          return;
-        }
-
-        if (block.type === "paragraph") {
-          const text = String(block.text || "").trim();
-
-          if (text) {
-            finalContent.push({
-              type: "paragraph",
-              text,
-            });
-          }
-
-          return;
-        }
-
-        if (block.type === "image") {
-          const imageBlock = {
-            type: "image",
-            alt: block.alt || "",
-            caption: block.caption || "",
-          };
-
-          if (block.file) {
-            imageBlock.imageIndex = imageIndex;
-
-            formData.append("contentImages", block.file);
-
-            imageIndex += 1;
-          } else {
-            imageBlock.src = block.src || block.url;
-          }
-
-          finalContent.push(imageBlock);
-          return;
-        }
-
-        // Preserve any other existing content block types.
-        const {
-          _key,
-          preview: ignoredPreview,
-          file: ignoredFile,
-          ...savedBlock
-        } = block;
-
-        finalContent.push(savedBlock);
-      });
-
       formData.append("content", JSON.stringify(finalContent));
 
       formData.append("author", form.author);
@@ -543,9 +585,10 @@ function AddArticle() {
       formData.append("metaTitle", form.metaTitle);
       formData.append("metaDescription", form.metaDescription);
 
-      // Thumbnail.
-      if (selectedImage) {
-        formData.append("thumbnail", selectedImage);
+      // For new articles, backend accepts the Cloudinary URL as text.
+      // For edits, existing thumbnail is left untouched.
+      if (!isEditing && uploadedThumbnail) {
+        formData.append("thumbnail", uploadedThumbnail);
       }
 
       if (isEditing) {
@@ -794,7 +837,7 @@ function AddArticle() {
 
                       {block.file && (
                         <small style={contentStyles.newImageLabel}>
-                          New image — will be uploaded when you save.
+                          New image — will be uploaded to Cloudinary when you save.
                         </small>
                       )}
 
@@ -961,16 +1004,23 @@ function AddArticle() {
           <div className="admin-form-group">
             <label htmlFor="thumbnail">Upload Thumbnail Image</label>
 
-            <input
-              id="thumbnail"
+           <input
+               id="thumbnail"
               type="file"
               accept="image/jpeg,image/png,image/webp,image/gif"
               onChange={handleImageChange}
+              disabled={isEditing}
             />
 
             <small>
               JPG, PNG, WEBP or GIF. Maximum size: 5 MB.
             </small>
+
+            {isEditing && (
+              <small style={{ display: "block", color: "#b45309", marginTop: "6px" }}>
+                Existing article thumbnails cannot be replaced without a backend change.
+              </small>
+            )}
 
             {preview && (
               <div style={{ marginTop: "15px" }}>
@@ -985,16 +1035,20 @@ function AddArticle() {
                   }}
                 />
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedImage(null);
-                    setPreview("");
-                  }}
-                  style={{ display: "block", marginTop: "8px" }}
-                >
-                  Remove image
-                </button>
+                {selectedImage && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedImage(null);
+                      setPreview(isEditing ? preview : "");
+                      const input = document.getElementById("thumbnail");
+                      if (input) input.value = "";
+                    }}
+                    style={{ display: "block", marginTop: "8px" }}
+                  >
+                    Remove selected image
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -1188,7 +1242,6 @@ const contentStyles = {
     resize: "vertical",
     lineHeight: 1.6,
   },
-  // NEW: Heading input styling.
   headingInput: {
     width: "100%",
     boxSizing: "border-box",
@@ -1240,7 +1293,6 @@ const contentStyles = {
     gap: "10px",
     marginTop: "18px",
   },
-  // NEW: Add Heading button styling.
   addHeadingButton: {
     padding: "11px 16px",
     background: "#dcfce7",

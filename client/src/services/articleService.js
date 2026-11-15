@@ -39,8 +39,7 @@ const fetchAPI = async (endpoint, options = {}) => {
     }
 
     throw new Error(
-      "Unable to connect to the server. Please check your connection."
-    );
+      "Unable to connect to the server. Please check your connection.");
   }
 
   if (!response.ok) {
